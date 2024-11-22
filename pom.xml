@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>mx.org.practicas.front</groupId>
-	<artifactId>mx.org.practicas.front.angreact</artifactId>
+	<artifactId>WSAngularReactSpring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>WSAngularReactSpring</name>
 	<description>Proyecto back angular y react</description>
