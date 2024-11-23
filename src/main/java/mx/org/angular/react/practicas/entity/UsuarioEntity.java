@@ -35,8 +35,8 @@ public class UsuarioEntity implements Serializable {
 	private Long id;
 	
 
-	@Column(name="usuario", unique = true)
-	private String usuario;
+	@Column(name="username", unique = true)
+	private String username;
 
 	private String password;
 	
@@ -87,9 +87,9 @@ public class UsuarioEntity implements Serializable {
 	}
 
 
-	public UsuarioEntity(String usuario, String password, String nombre, String paterno, String materno, int estatus,
+	public UsuarioEntity(String username, String password, String nombre, String paterno, String materno, int estatus,
 			String foto, List<RolEntity> roles, SexoEntity sexo, EstadoCivilEntity estadoCivil) {
-		this.usuario = usuario;
+		this.username = username;
 		this.password = password;
 		this.nombre = nombre;
 		this.paterno = paterno;
@@ -115,13 +115,15 @@ public class UsuarioEntity implements Serializable {
 	}
 
 
-	public String getUsuario() {
-		return usuario;
+	
+
+	public String getUsername() {
+		return username;
 	}
 
 
-	public void setUusario(String usuario) {
-		this.usuario = usuario;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 

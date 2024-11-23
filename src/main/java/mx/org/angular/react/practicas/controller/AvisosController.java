@@ -13,41 +13,43 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.org.angular.react.practicas.entity.AvisosEntity;
 import mx.org.angular.react.practicas.service.IAvisosService;
 
 @RestController
+@RequestMapping("/api/advice")
 public class AvisosController {
 
 	@Autowired
 	private IAvisosService avisosService;
 
 	
-    @GetMapping("/getAvisos")
+    @GetMapping("/getAdvices")
     public List<AvisosEntity> list() {
         return avisosService.findAll();
     }
 
     
-    @GetMapping("/getAviso/{id}")
+    @GetMapping("/getAdvice/{id}")
     public ResponseEntity<?> show(@PathVariable Long id) {
         Optional<AvisosEntity> userOptional = avisosService.findById(id);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(userOptional.orElseThrow());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap("error", "el usuario no se encontro por el id:" + id));
+                .body(Collections.singletonMap("error", "Aviso no encontrado por el id:" + id));
     }
     
-    @PostMapping("/avisos/create")
+    @PostMapping("/create")
     public ResponseEntity<AvisosEntity> create(@RequestBody AvisosEntity user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(avisosService.save(user));
     }
     
     
-    @PutMapping("/avisos/actualiza/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<AvisosEntity> update(@PathVariable Long id, @RequestBody AvisosEntity avisoPost) {
         Optional<AvisosEntity> userOptional = avisosService.findById(id);
 
@@ -62,7 +64,7 @@ public class AvisosController {
         return ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/avisos/eliminar/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<AvisosEntity> eliminar(@PathVariable Long id) {
         Optional<AvisosEntity> userOptional = avisosService.findById(id);
 

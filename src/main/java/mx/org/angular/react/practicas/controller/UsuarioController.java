@@ -13,26 +13,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.org.angular.react.practicas.entity.UsuarioEntity;
 import mx.org.angular.react.practicas.service.IUsuariosService;
 
 @RestController
+@RequestMapping("/api/users")
 public class UsuarioController {
 
 	@Autowired 
 	private IUsuariosService usuariosService;
 
 	
-    @GetMapping("/getUsuarios")
+    @GetMapping("/getUsers")
     public List<UsuarioEntity> list() {
     	System.out.println("El total de suaurios es: "+ usuariosService.findAll().size());
         return usuariosService.findAll();
     }
 
     
-    @GetMapping("/getUsuario/{id}")
+    @GetMapping("/getUser/{id}")
     public ResponseEntity<?> show(@PathVariable Long id) {
         Optional<UsuarioEntity> userOptional = usuariosService.findById(id);
         if (userOptional.isPresent()) {
@@ -42,13 +44,13 @@ public class UsuarioController {
                 .body(Collections.singletonMap("error", "el usuario no se encontro por el id:" + id));
     }
     
-    @PostMapping("/usuarios/create")
+    @PostMapping("/create")
     public ResponseEntity<UsuarioEntity> create(@RequestBody UsuarioEntity user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuariosService.save(user));
     }
     
     
-    @PutMapping("/usuarios/actualizar/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<UsuarioEntity> update(@PathVariable Long id, @RequestBody UsuarioEntity userPost) {
         Optional<UsuarioEntity> userOptional = usuariosService.findById(id);
 
@@ -68,7 +70,7 @@ public class UsuarioController {
     }
     
     
-    @DeleteMapping("/usuarios/eliminar/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<UsuarioEntity> update(@PathVariable Long id) {
         Optional<UsuarioEntity> userOptional = usuariosService.findById(id);
 
