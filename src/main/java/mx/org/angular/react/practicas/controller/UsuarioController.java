@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import mx.org.angular.react.practicas.entity.UsuarioEntity;
 import mx.org.angular.react.practicas.service.IUsuariosService;
 
+@CrossOrigin(origins={"http://localhost:4200"})
 @RestController
 @RequestMapping("/api/users")
 public class UsuarioController {
@@ -52,20 +54,13 @@ public class UsuarioController {
     
     @PutMapping("/update/{id}")
     public ResponseEntity<UsuarioEntity> update(@PathVariable Long id, @RequestBody UsuarioEntity userPost) {
-        Optional<UsuarioEntity> userOptional = usuariosService.findById(id);
-
-        if (userOptional.isPresent()) {
-        	UsuarioEntity userDb = userOptional.get();
-            userDb.setPassword(userPost.getPassword());
-            userDb.setNombre(userPost.getNombre());
-            userDb.setPaterno(userPost.getPaterno());
-            userDb.setMaterno(userPost.getMaterno());
-            userDb.setFoto(userPost.getFoto());
-            userDb.setSexo(userPost.getSexo());
-            userDb.setEstadoCivil(userPost.getEstadoCivil());
-            
-            return ResponseEntity.ok(usuariosService.save(userDb));
+        
+    	Optional<UsuarioEntity> mod= usuariosService.update(userPost, id);
+    	
+    	if (mod.isPresent()) {
+            return ResponseEntity.ok(mod.orElseThrow());
         }
+        
         return ResponseEntity.notFound().build();
     }
     

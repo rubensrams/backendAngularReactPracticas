@@ -15,5 +15,7 @@ public interface IUsuariosService {
     UsuarioEntity save(UsuarioEntity user);
 
     void deleteById(Long id);
+    
+    Optional<UsuarioEntity> update(UsuarioEntity userPost,Long id);
 	
 }

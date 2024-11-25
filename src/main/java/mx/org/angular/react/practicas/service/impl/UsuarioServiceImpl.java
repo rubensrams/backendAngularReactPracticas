@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +24,20 @@ public class UsuarioServiceImpl implements IUsuariosService, UserDetailsService{
 	@Autowired
 	private IUsuarioDAO usuarioDAO;
 	
-
+    private PasswordEncoder passwordEncoder;
+	
 	@Override
     @Transactional(readOnly = true)
 	public List<UsuarioEntity> findAll() {
 		return (List<UsuarioEntity>) usuarioDAO.findAll();
 
 	}
+	
+    public UsuarioServiceImpl(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    @Transactional(readOnly = true)
+	@Transactional(readOnly = true)
     @Override
 	public Optional<UsuarioEntity> findById(Long id) {
     	 return usuarioDAO.findById(id);
@@ -40,6 +46,7 @@ public class UsuarioServiceImpl implements IUsuariosService, UserDetailsService{
     @Transactional
     @Override
 	public UsuarioEntity save(UsuarioEntity user) {
+    	user.setPassword(passwordEncoder.encode(user.getPassword()));
         return usuarioDAO.save(user);
 	}
 
@@ -76,5 +83,25 @@ public class UsuarioServiceImpl implements IUsuariosService, UserDetailsService{
                 authorities);
 
     }
+
+	@Override
+	public Optional<UsuarioEntity> update(UsuarioEntity userPost, Long id) {
+        
+			Optional<UsuarioEntity> userOptional = usuarioDAO.findById(id);
+				if (userOptional.isPresent()) {
+		        	UsuarioEntity userDb = userOptional.get();
+		            userDb.setPassword(passwordEncoder.encode(userPost.getPassword()));
+		            userDb.setNombre(userPost.getNombre());
+		            userDb.setPaterno(userPost.getPaterno());
+		            userDb.setMaterno(userPost.getMaterno());
+		            userDb.setFoto(userPost.getFoto());
+		            userDb.setSexo(userPost.getSexo());
+		            userDb.setEstadoCivil(userPost.getEstadoCivil());		            
+	            return Optional.of( usuarioDAO.save(userDb));
+            
+			}
+			    return Optional.empty();
+
+	}
 
 }
